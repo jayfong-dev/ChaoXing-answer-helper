@@ -6,6 +6,7 @@ __pycache__/
 
 # 测试输出
 test/shots/
+test/demo_frames/
 docs/shots/
 
 # 构建产物

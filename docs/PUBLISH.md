@@ -49,7 +49,7 @@ git add -A
 git status --short          # ★ 检查一遍：不该出现 node_modules/、test/shots/
 git commit -m "feat: 初始版本 v1.2.0（判卷式答题 + 图片题 + 用量统计）"
 
-git remote add origin https://github.com/<你的用户名>/assistant-answer-helper.git
+git remote add origin https://github.com/jay1793901250-arch/ChaoXing-answer-helper.git
 git push -u origin main
 ```
 

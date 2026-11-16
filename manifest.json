@@ -5,7 +5,7 @@
   "version": "1.2.0",
   "description": "适配常见课程平台的作业/测验页：读取题目调用你的模型作答，先判对错、错的才改，不覆盖你手填的答案。",
   "author": "JF",
-  "homepage_url": "https://github.com/JF/x-assistant",
+  "homepage_url": "https://github.com/jay1793901250-arch/ChaoXing-answer-helper",
   "minimum_chrome_version": "116",
   "permissions": [
     "storage",

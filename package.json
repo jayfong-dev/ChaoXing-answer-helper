@@ -16,5 +16,9 @@
   "devDependencies": {
     "jsdom": "^31.0.1",
     "playwright-core": "^1.65.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jay1793901250-arch/ChaoXing-answer-helper.git"
   }
 }

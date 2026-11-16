@@ -1,0 +1,58 @@
+{
+  "manifest_version": 3,
+  "name": "Assistant · 答题助手",
+  "short_name": "Assistant",
+  "version": "1.2.0",
+  "description": "适配常见课程平台的作业/测验页：读取题目调用你的模型作答，先判对错、错的才改，不覆盖你手填的答案。",
+  "author": "JF",
+  "homepage_url": "https://github.com/JF/x-assistant",
+  "minimum_chrome_version": "116",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "*://*.chaoxing.com/*",
+    "http://127.0.0.1/*",
+    "http://localhost/*",
+    "https://api.deepseek.com/*",
+    "https://*.deepseek.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Assistant · 答题助手",
+    "default_icon": {
+      "16": "icons/16.png",
+      "32": "icons/32.png",
+      "48": "icons/48.png",
+      "128": "icons/128.png"
+    }
+  },
+  "options_page": "options.html",
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.chaoxing.com/*",
+        "http://127.0.0.1/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ],
+  "icons": {
+    "16": "icons/16.png",
+    "32": "icons/32.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  }
+}

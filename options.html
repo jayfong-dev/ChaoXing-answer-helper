@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>设置 · Assistant</title>
+<style>
+  :root{
+    --bg:#f6f6f2; --panel:#fff; --line:rgba(0,0,0,.10); --line-soft:rgba(0,0,0,.06);
+    --text:#1b1a17; --sub:#6e6a62; --dim:#98938a; --accent:#1b1a17; --accent-fg:#fff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:32px 24px 80px;font:13px/1.7 -apple-system,"Segoe UI","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text)}
+  .wrap{max-width:880px;margin:0 auto;display:grid;grid-template-columns:170px 1fr;gap:28px}
+  .side{position:sticky;top:32px;align-self:start}
+  .brand{display:flex;align-items:center;gap:9px;margin-bottom:22px}
+  .logo{width:26px;height:26px;border-radius:9px;background:var(--accent);position:relative;flex:none}
+  .logo::before{content:"";position:absolute;left:20%;top:30%;width:52%;height:34%;border-radius:5px;background:var(--accent-fg)}
+  .logo::after{content:"";position:absolute;left:56%;top:62%;width:26%;height:26%;border-radius:999px;background:var(--accent-fg)}
+  .brand b{font-size:14px;letter-spacing:.02em}
+  .brand span{font-weight:400;color:var(--sub);margin-left:5px}
+  nav a{display:block;padding:7px 0 7px 12px;color:var(--dim);text-decoration:none;font-size:12px;border-left:1px solid transparent}
+  nav a.on{color:var(--text);border-left-color:var(--text);font-weight:600}
+  nav a:hover{color:var(--text)}
+  .side .sign{margin-top:26px;font-size:11px;color:var(--dim)}
+
+  section{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px 22px;margin-bottom:16px}
+  section h2{margin:0 0 4px;font-size:14px;letter-spacing:.02em}
+  section p.hint{margin:0 0 14px;color:var(--dim);font-size:11px}
+  label{display:block;margin:14px 0 5px;font-size:11px;color:var(--sub)}
+  input[type=text],input[type=password],input[type=number],select,textarea{
+    width:100%;padding:9px 12px;border-radius:12px;border:1px solid var(--line);
+    background:transparent;color:var(--text);font:inherit;font-size:12px;
+  }
+  input:focus,select:focus,textarea:focus{outline:none;border-color:rgba(0,0,0,.32)}
+  textarea{min-height:64px;resize:vertical}
+  .chk{display:flex;align-items:center;gap:9px;margin:10px 0;font-size:12px}
+  .chk input{width:15px;height:15px;accent-color:var(--accent)}
+  .presets{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px}
+  .presets button{padding:6px 13px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--sub);font:inherit;font-size:11px;cursor:pointer}
+  .presets button:hover{color:var(--text);border-color:var(--sub)}
+  .presets button.on{background:var(--accent);color:var(--accent-fg);border-color:transparent}
+
+  .themes{display:flex;gap:10px;flex-wrap:wrap}
+  .theme{flex:1;min-width:150px;border:1px solid var(--line);border-radius:14px;padding:10px;cursor:pointer;background:transparent;text-align:left;font:inherit;color:inherit}
+  .theme.on{border-color:var(--text)}
+  .theme .sw{display:flex;gap:4px;margin-bottom:8px}
+  .theme .sw i{width:18px;height:18px;border-radius:6px;border:1px solid var(--line);display:block}
+  .theme b{font-size:12px;display:block}
+  .theme small{color:var(--dim);font-size:10px}
+
+  .bar{position:sticky;bottom:0;margin-top:8px;padding:14px 0;background:linear-gradient(transparent,var(--bg) 40%);display:flex;gap:10px;align-items:center}
+  .bar button{padding:10px 20px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--text);font:inherit;cursor:pointer}
+  .bar button.primary{background:var(--accent);color:var(--accent-fg);border-color:transparent;font-weight:600}
+  .msg{font-size:11px;color:var(--sub)}
+  .msg.ok{color:#1f7a4d}.msg.bad{color:#a3302f}
+  code{background:rgba(0,0,0,.05);padding:1px 5px;border-radius:5px;font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <aside class="side">
+    <div class="brand">
+      <div class="logo"></div>
+      <div><b>Assistant</b><span>答题助手</span></div>
+    </div>
+    <nav>
+      <a href="#api" class="on">接口</a>
+      <a href="#ui">外观</a>
+      <a href="#behavior">答题行为</a>
+      <a href="#vision">图片题</a>
+      <a href="#existing">已有答案</a>
+      <a href="#advanced">高级</a>
+      <a href="#about">关于</a>
+    </nav>
+    <div class="sign">by JF · MIT</div>
+  </aside>
+
+  <main>
+    <section id="api">
+      <h2>接口</h2>
+      <p class="hint">OpenAI 兼容格式。本地服务不用填 Key。</p>
+      <div class="presets">
+        <button type="button" class="preset" data-base="https://api.deepseek.com/v1" data-model="deepseek-flash">DeepSeek V4.1-Flash</button>
+        <button type="button" class="preset" data-base="https://api.deepseek.com/v1" data-model="deepseek-v4-pro">DeepSeek V4-Pro</button>
+        <button type="button" class="preset" data-base="http://127.0.0.1:11434/v1" data-model="">本地 Ollama</button>
+        <button type="button" class="preset" data-base="http://127.0.0.1:1234/v1" data-model="">本地 LM Studio</button>
+      </div>
+      <label>Base URL</label>
+      <input type="text" id="baseUrl" placeholder="https://api.deepseek.com/v1" />
+      <label>API Key</label>
+      <input type="password" id="apiKey" placeholder="sk-..." />
+      <label>模型名</label>
+      <input type="text" id="model" placeholder="deepseek-flash" />
+      <div style="display:flex;gap:12px">
+        <div style="flex:1"><label>temperature</label><input type="number" id="temperature" step="0.1" min="0" max="2" /></div>
+        <div style="flex:1"><label>JSON 模式</label>
+          <select id="jsonMode"><option value="true">开（推荐）</option><option value="false">关</option></select></div>
+      </div>
+      <div style="display:flex;gap:12px">
+        <div style="flex:1"><label>思考模式</label>
+          <select id="thinking"><option value="false">关闭（快、省）</option><option value="true">开启（更准）</option></select></div>
+        <div style="flex:1"><label>推理强度</label>
+          <select id="reasoningEffort"><option value="low">low</option><option value="high">high</option><option value="max">max</option></select></div>
+      </div>
+      <div style="margin-top:14px;display:flex;align-items:center;gap:10px">
+        <button type="button" id="test" style="padding:8px 16px;border-radius:999px;border:1px solid rgba(0,0,0,.14);background:transparent;color:inherit;font:inherit;cursor:pointer">测试连接</button>
+        <span class="msg" id="testMsg"></span>
+      </div>
+    </section>
+
+    <section id="ui">
+      <h2>外观</h2>
+      <p class="hint">页面内面板的主题。改动即时生效，无需重装。</p>
+      <div class="themes">
+        <button type="button" class="theme" data-theme="graphite">
+          <div class="sw"><i style="background:#16181c"></i><i style="background:#2a2d33"></i><i style="background:#e6e9ef"></i></div>
+          <b>石墨</b><small>默认 · 冷灰金属感</small>
+        </button>
+        <button type="button" class="theme" data-theme="paper">
+          <div class="sw"><i style="background:#fff"></i><i style="background:#e7e4dc"></i><i style="background:#1b1a17"></i></div>
+          <b>纸白</b><small>浅色 · 像纸一样安静</small>
+        </button>
+        <button type="button" class="theme" data-theme="ink">
+          <div class="sw"><i style="background:#101724"></i><i style="background:#23304a"></i><i style="background:#4c7dff"></i></div>
+          <b>墨蓝</b><small>唯一的一抹蓝</small>
+        </button>
+      </div>
+    </section>
+
+    <section id="behavior">
+      <h2>答题行为</h2>
+      <div class="chk"><input type="checkbox" id="autoFill" /><label for="autoFill" style="margin:0">自动填充（关掉=只显示不填）</label></div>
+      <div class="chk"><input type="checkbox" id="autoNext" /><label for="autoNext" style="margin:0">做完自动点「下一题」</label></div>
+      <div class="chk"><input type="checkbox" id="autoSubmit" /><label for="autoSubmit" style="margin:0">做完自动交卷（危险，默认关）</label></div>
+      <div style="display:flex;gap:12px">
+        <div style="flex:1"><label>每题间隔（毫秒）</label><input type="number" id="delayMs" min="0" step="100" /></div>
+        <div style="flex:1"><label>最多处理题数</label><input type="number" id="maxQuestions" min="1" /></div>
+      </div>
+    </section>
+
+    <section id="vision">
+      <h2>图片题</h2>
+      <p class="hint">题干里的流程图 / 网络图 / 表格图片会随题目一起发给模型（需要支持视觉的模型）。</p>
+      <label>发送方式</label>
+      <select id="visionMode">
+        <option value="auto">自动：题干有图才发送（推荐）</option>
+        <option value="off">关闭：只发文字</option>
+        <option value="always">总是：每题都尝试附带图片</option>
+      </select>
+      <div style="display:flex;gap:12px">
+        <div style="flex:1"><label>图片精度</label>
+          <select id="visionDetail">
+            <option value="original">original（保真，推荐）</option>
+            <option value="low">low（512×512，省 token）</option>
+          </select></div>
+        <div style="flex:1"><label>每题最多几张</label>
+          <input type="number" id="maxImagesPerQuestion" min="0" max="6" /></div>
+      </div>
+      <p class="hint" id="visionWarn" style="color:#a3302f;display:none">
+        当前模型不支持图片输入，请切换到 <code>deepseek-flash</code>（DeepSeek V4.1-Flash）。
+      </p>
+    </section>
+
+    <section id="existing">
+      <h2>已有答案</h2>
+      <p class="hint">默认忽略原答案、重新作答（会覆盖页面上已选的答案）。</p>
+      <label>处理方式</label>
+      <select id="existingMode">
+        <option value="overwrite">忽略原答案，重新作答（默认）</option>
+        <option value="check">先判卷：正确保留，错误更正</option>
+        <option value="skip">直接跳过，一律不动</option>
+      </select>
+      <label>判卷最小置信度（仅「先判卷」模式生效，低于则保留原答案）</label>
+      <input type="number" id="minConfidence" step="0.05" min="0" max="1" />
+    </section>
+
+    <section id="advanced">
+      <h2>高级</h2>
+      <label>提示词补充</label>
+      <textarea id="extraPrompt" placeholder="例如：按教材原文作答，答案尽量短"></textarea>
+      <label>自定义题目容器（认不出题目时填，一行一个）</label>
+      <textarea id="customContainers" placeholder=".questionLi"></textarea>
+      <label>自定义题干</label>
+      <textarea id="customStem" placeholder=".Zy_TItle"></textarea>
+      <label>自定义选项</label>
+      <textarea id="customOptions" placeholder=".Zy_ulTop li"></textarea>
+    </section>
+
+    <section id="about">
+      <h2>关于</h2>
+      <p class="hint">本工具仅辅助作答，提交前请自行核对。</p>
+      <div style="display:grid;grid-template-columns:90px 1fr;gap:8px 12px;font-size:12px">
+        <span style="color:var(--dim)">名称</span><span>Assistant · 答题助手</span>
+        <span style="color:var(--dim)">作者</span><span>JF</span>
+        <span style="color:var(--dim)">版本</span><span id="aboutVer"></span>
+        <span style="color:var(--dim)">许可</span><span>MIT License</span>
+        <span style="color:var(--dim)">适用</span><span>学习通 / 超星等常见课程平台的作业与测验页</span>
+      </div>
+    </section>
+
+    <div class="bar">
+      <button class="primary" id="save">保存</button>
+      <button id="reset">恢复默认</button>
+      <span class="msg" id="msg"></span>
+    </div>
+  </main>
+</div>
+<script src="options.js"></script>
+</body>
+</html>

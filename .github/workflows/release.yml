@@ -1,0 +1,52 @@
+name: release
+
+# 打 tag 时自动：跑校验 → 打包 → 建 Release 并上传 zip
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 校验：manifest 引用的文件是否都存在、版本号是否一致
+      - name: Manifest check
+        run: node test/manifest_check.mjs
+
+      - name: Version check
+        run: node test/version_check.mjs
+
+      # 打包（排除 test/docs/node_modules）
+      - name: Build zip
+        run: node scripts/build-release.mjs
+
+      - name: Read version
+        id: v
+        run: echo "version=$(node -p "require('./manifest.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: v${{ steps.v.outputs.version }}
+          files: dist/*.zip
+          generate_release_notes: true
+          body: |
+            ### 安装
+            1. 下载下面的 `assistant-answer-helper-*.zip` 并解压
+            2. 打开 `edge://extensions`（Chrome 为 `chrome://extensions`）
+            3. 打开「开发者模式」→「加载解压缩的扩展」→ 选择解压出来的文件夹
+            4. 点扩展图标 → 设置 → 填 API Key 与模型（默认 `deepseek-flash`）
+
+            ### 说明
+            本工具仅辅助作答，答案由你配置的模型生成，**提交前请自行核对**。
+            与任何课程平台无关联。详见 README 的「声明」一节。

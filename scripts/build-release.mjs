@@ -58,10 +58,15 @@ const buildInfo = {
 };
 fs.writeFileSync(path.join(staging, "build-info.json"), JSON.stringify(buildInfo, null, 2));
 
-execSync(
-  `powershell -NoProfile -Command "Compress-Archive -Path '${staging}\\*' -DestinationPath '${zipPath}' -Force"`,
-  { stdio: "inherit" }
-);
+// 跨平台压缩：Windows 用 Compress-Archive，Linux/macOS 用 zip
+if (process.platform === "win32") {
+  execSync(
+    `powershell -NoProfile -Command "Compress-Archive -Path '${staging}\\*' -DestinationPath '${zipPath}' -Force"`,
+    { stdio: "inherit" }
+  );
+} else {
+  execSync(`cd "${staging}" && zip -r -q "${zipPath}" .`, { stdio: "inherit" });
+}
 fs.rmSync(staging, { recursive: true, force: true });
 
 const size = (fs.statSync(zipPath).size / 1024).toFixed(1);
